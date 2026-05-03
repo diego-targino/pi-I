@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework import viewsets
@@ -71,3 +72,16 @@ class UserViewSet(viewsets.ViewSet):
         )
 
         return Response({'message': 'Cadastro realizado com sucesso'})
+=======
+from rest_framework.viewsets import ViewSet
+from rest_framework.response import Response
+from rest_framework import status
+from users.serializers import UserSerializer
+from users.services import UserService
+
+class UserViewSet(ViewSet):
+
+    def create(self, request):
+        user = UserService.create_user(request.data)
+        return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+>>>>>>> a25b68c5809fd1d7ab5a6636f44fb6e370397478
