@@ -1,22 +1,5 @@
 from django.db import models
-from users.models import Profile
-
-
-class Farm(models.Model):
-    user = models.ForeignKey(
-        Profile,
-        on_delete=models.CASCADE,
-        related_name="farms"
-    )
-
-    name = models.CharField(max_length=150)
-    location = models.CharField(max_length=150)
-    municipality = models.CharField(max_length=150)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
+from users.models.user_model import User
 
 
 class SearchRequest(models.Model):
@@ -31,7 +14,7 @@ class SearchRequest(models.Model):
     STATUS_FAILED = 4
 
     user = models.ForeignKey(
-        Profile,
+        User,
         on_delete=models.CASCADE,
         related_name="search_requests"
     )

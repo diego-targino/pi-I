@@ -1,67 +1,56 @@
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
-from .models import Profile
+
+from users.serializers.login_serializer import LoginSerializer
+from users.serializers.register_user_serializer import RegisterUserSerializer
+from users.services.user_service import UserService
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class UserViewSet(viewsets.ViewSet):
 
-    @action(detail=False, methods=['post'])
+    def get_permissions(self):
+
+        if self.action in ["login", "create"]:
+            return [AllowAny()]
+
+        return super().get_permissions()
+
+    @action(detail=False, methods=["post"])
     def login(self, request):
-        telefone = request.data.get('telefone')
-        senha = request.data.get('password')
 
-        if not telefone or not senha:
-            return Response({'error': 'Telefone e senha são obrigatórios'}, status=400)
-
-        try:
-            User.objects.get(username=telefone)
-        except User.DoesNotExist:
-            return Response({'error': 'Usuário não cadastrado'}, status=404)
-
-        user = authenticate(request, username=telefone, password=senha)
-
-        if user:
-            login(request, user)
-            return Response({'message': 'Login realizado com sucesso'})
-        else:
-            return Response({'error': 'Telefone ou senha incorretos'}, status=400)
-
-    @action(detail=False, methods=['post'])
-    def register(self, request):
-        nome = request.data.get('nome')
-        telefone = request.data.get('telefone')
-        senha = request.data.get('password')
-
-        estado = request.data.get('estado')
-        cidade = request.data.get('cidade')
-        localidade = request.data.get('localidade')
-        fazenda = request.data.get('fazenda')
-
-        if not nome or not telefone or not senha:
-            return Response({'error': 'Nome, telefone e senha são obrigatórios'}, status=400)
-
-        if User.objects.filter(username=telefone).exists():
-            return Response({'error': 'Telefone já cadastrado'}, status=400)
-
-        user = User.objects.create_user(
-            username=telefone,
-            password=senha
+        serializer = LoginSerializer(
+            data=request.data
         )
 
-        Profile.objects.create(
-            user=user,
-            nome=nome,
-            telefone=telefone,
-            estado=estado or '',
-            cidade=cidade or '',
-            localidade=localidade or '',
-            fazenda=fazenda or ''
+        serializer.is_valid(
+            raise_exception=True
         )
 
-        return Response({'message': 'Cadastro realizado com sucesso'})
+        dto = serializer.to_dto()
+
+        result = UserService.login(dto)
+
+        return Response(
+            result,
+            status=status.HTTP_200_OK
+        )
+
+    def create(self, request):
+
+        serializer = RegisterUserSerializer(
+            data=request.data
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        dto = serializer.to_dto()
+
+        result = UserService.create_user(
+            dto
+        )
+
+        return Response(result, status=status.HTTP_201_CREATED)
