@@ -1,4 +1,7 @@
 from django.db import models
+
+# Create your models here.
+from django.db import models
 from users.models.user_model import User
 
 
@@ -44,8 +47,8 @@ class SearchRequest(models.Model):
         blank=True
     )
 
-    def __str__(self):
-        return f"Request {self.id}"
+    class Meta:
+        db_table = "SearchRequests"
 
 
 class PlantAnalysisResult(models.Model):
@@ -79,8 +82,8 @@ class PlantAnalysisResult(models.Model):
         auto_now_add=True
     )
 
-    def __str__(self):
-        return self.common_name
+    class Meta:
+        db_table = "PlantAnalysisResults"
 
 
 class SearchErrorLog(models.Model):
@@ -107,5 +110,5 @@ class SearchErrorLog(models.Model):
 
     error_response = models.TextField()
 
-    def __str__(self):
-        return f"Error {self.id}"
+    class Meta:
+        db_table = "SearchErrorLogs"
