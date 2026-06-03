@@ -7,6 +7,7 @@ class SearchRequest(models.Model):
     RESULT_COMPLETE = 0
     RESULT_PARTIAL = 1
     RESULT_NOT_FOUND = 3
+    RESULT_ERROR = 4
 
     STATUS_PENDING = 0
     STATUS_PROCESSING = 1
@@ -19,7 +20,9 @@ class SearchRequest(models.Model):
         related_name="search_requests"
     )
 
-    image_path = models.CharField(max_length=150)
+    image = models.ImageField(
+        upload_to="analysis/"
+    )
 
     result_type = models.IntegerField(
         null=True,

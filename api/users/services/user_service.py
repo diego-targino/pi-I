@@ -8,6 +8,7 @@ from users.models.user_model import User, UserStatus
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import transaction
 import jwt
+from rest_framework.exceptions import ParseError
 
 class UserService:
 
@@ -16,7 +17,7 @@ class UserService:
     def create_user(dto : RegisterUserDTO):
 
         if User.objects.filter( phone=dto.phone).exists():
-            raise Exception("Telefone já existe")
+            raise ParseError("Telefone já existe")
         
         user = User.objects.create(
             name = dto.name,
@@ -56,10 +57,10 @@ class UserService:
         user = User.objects.filter(phone=dto.phone).first()
         
         if not user:
-            raise Exception("Telefone ou Senha incorretos")
+            raise ParseError("Telefone ou Senha incorretos")
 
         if not check_password(dto.password, user.password_hash):
-            raise Exception("Telefone ou Senha incorretos")
+            raise ParseError("Telefone ou Senha incorretos")
 
         farm = Farm.objects.filter(user=user).first()
 
@@ -67,7 +68,7 @@ class UserService:
 
         token = jwt.encode(
             {
-                "sub": user.id,
+                "sub": str(user.id),
                 "phone": user.phone,
                 "exp": expiration
             },
