@@ -143,8 +143,10 @@ class PlantAnalysisService:
                 "result_type": search_request.result_type,
                 "error_message": "Houve um erro no processamento da imagem, por favor tente novamente mais tarde."
             }
-    @staticmethod
-    def get_details(search_request_id, user_id):
+
+        
+        @staticmethod
+        def get_details(search_request_id, user_id):
 
         user = User.objects.filter(id=user_id).first()
 
@@ -180,22 +182,27 @@ class PlantAnalysisService:
                 for result in search_request.results.all()
             ]
         }
-        
-        @staticmethod
-            def get_history(user_id):
-            user = User.objects.filter(id=user_id).first()
-            if not user:
+
+    @staticmethod
+    def get_history(user_id):
+
+        user = User.objects.filter(id=user_id).first()
+
+        if not user:
             raise NotFound("Usuário não encontrado")
-            requests = SearchRequest.objects.filter(user=user).order_by("-request_date")
-            
-    return [
-        {
-            "search_request_id": request.id,
-            "status": request.status,
-            "result_type": request.result_type,
-            "request_date": request.request_date,
-            "finished_at": request.finished_at,
-            "image": request.image.url if request.image else None
-        }
-        for request in requests
-    ]
+
+        requests = SearchRequest.objects.filter(
+            user=user
+        ).order_by("-request_date")
+
+        return [
+            {
+                "search_request_id": request.id,
+                "status": request.status,
+                "result_type": request.result_type,
+                "request_date": request.request_date,
+                "finished_at": request.finished_at,
+                "image": request.image.url if request.image else None
+            }
+            for request in requests
+        ]
