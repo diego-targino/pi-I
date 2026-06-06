@@ -180,3 +180,22 @@ class PlantAnalysisService:
                 for result in search_request.results.all()
             ]
         }
+        
+        @staticmethod
+            def get_history(user_id):
+            user = User.objects.filter(id=user_id).first()
+            if not user:
+            raise NotFound("Usuário não encontrado")
+            requests = SearchRequest.objects.filter(user=user).order_by("-request_date")
+            
+    return [
+        {
+            "search_request_id": request.id,
+            "status": request.status,
+            "result_type": request.result_type,
+            "request_date": request.request_date,
+            "finished_at": request.finished_at,
+            "image": request.image.url if request.image else None
+        }
+        for request in requests
+    ]
