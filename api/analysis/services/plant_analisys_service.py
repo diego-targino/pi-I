@@ -147,41 +147,39 @@ class PlantAnalysisService:
         
     @staticmethod
     def get_details(search_request_id, user_id):
-
+    
         user = User.objects.filter(id=user_id).first()
-
+    
         if not user:
             raise NotFound("Usuário não encontrado")
-
+    
         search_request = SearchRequest.objects.filter(
-            id=search_request_id
+            id=search_request_id,
+            user_id=user_id
         ).first()
-
+    
         if not search_request:
             raise NotFound("Análise não encontrada")
-
-        if search_request.user.id != user.id:
-            raise NotFound("Análise não encontrada")
-
+    
         return {
-            "search_request_id": search_request.id,
-            "result_type": search_request.result_type,
-            "status": search_request.status,
-            "image": search_request.image.url if search_request.image else None,
-            "analysis_results": [
-                {
-                    "id": result.id,
-                    "common_name": result.common_name,
-                    "scientific_name": result.scientific_name,
-                    "susceptible_animal_species": result.susceptible_animal_species,
-                    "human_risks": result.human_risks,
-                    "common_symptoms": result.common_symptoms,
-                    "recommended_actions": result.recommended_actions,
-                    "confidence_score": float(result.confidence_score)
-                }
-                for result in search_request.results.all()
-            ]
-        }
+        "search_request_id": search_request.id,
+        "result_type": search_request.result_type,
+        "status": search_request.status,
+        "image": search_request.image.url if search_request.image else None,
+        "analysis_results": [
+            {
+                "id": result.id,
+                "common_name": result.common_name,
+                "scientific_name": result.scientific_name,
+                "susceptible_animal_species": result.susceptible_animal_species,
+                "human_risks": result.human_risks,
+                "common_symptoms": result.common_symptoms,
+                "recommended_actions": result.recommended_actions,
+                "confidence_score": float(result.confidence_score)
+            }
+            for result in search_request.results.all()
+        ]
+    }
 
     @staticmethod
     def get_history(user_id):
