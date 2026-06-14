@@ -145,8 +145,8 @@ class PlantAnalysisService:
             }
 
         
-        @staticmethod
-        def get_details(search_request_id, user_id):
+    @staticmethod
+    def get_details(search_request_id, user_id):
 
         user = User.objects.filter(id=user_id).first()
 
