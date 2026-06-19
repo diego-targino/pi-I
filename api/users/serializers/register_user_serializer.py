@@ -10,30 +10,35 @@ from users.serializers.register_farm_serializer import (
 
 
 class RegisterUserSerializer(serializers.Serializer):
-
+    """Serializer para registro de novos usuários."""
     name = serializers.CharField(
         max_length=150,
-        required=True
+        required=True,
+        help_text="Nome completo do usuário"
     )
 
     phone = PhoneNumberField(
         region="BR",
-        required=True
+        required=True,
+        help_text="Telefone do usuário no formato brasileiro (Ex: +55 11 99999-9999)"
     )
 
     password = serializers.CharField(
         write_only=True,
         min_length=6,
-        required=True
+        required=True,
+        help_text="Senha (mínimo 6 caracteres)"
     )
 
     confirm_password = serializers.CharField(
         write_only=True,
-        required=True
+        required=True,
+        help_text="Confirmação de senha (deve ser igual à senha)"
     )
 
     farm = RegisterFarmSerializer(
-        required=True
+        required=True,
+        help_text="Dados da fazenda do usuário"
     )
 
     def validate(self, data):
