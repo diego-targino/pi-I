@@ -17,6 +17,8 @@ class PlantAnalysisResult(models.Model):
 
     susceptible_animal_species = models.TextField()
 
+    description = models.TextField(null=True, blank=True, default=None)
+
     human_risks = models.TextField()
 
     common_symptoms = models.TextField()

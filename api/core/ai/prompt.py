@@ -100,6 +100,9 @@ ScientificName
 - Nome científico completo da espécie.
 - Utilizar nomenclatura científica oficial.
 
+Description
+- Uma descrição da planta identificada.
+
 SusceptibleAnimalSpecies
 
 - Lista das espécies animais suscetíveis à intoxicação.
@@ -203,6 +206,7 @@ Estrutura obrigatória:
     {
       "CommonName": "",
       "ScientificName": "",
+      "Description":"",
       "SusceptibleAnimalSpecies": [],
       "HumanRisks": "",
       "CommonSymptoms": [],

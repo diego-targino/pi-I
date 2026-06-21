@@ -73,6 +73,7 @@ class PlantAnalysisService:
                         search_request=search_request,
                         common_name =analysis_result.CommonName,
                         scientific_name=analysis_result.ScientificName,
+                        description=analysis_result.Description,
                         susceptible_animal_species=";".join(analysis_result.SusceptibleAnimalSpecies if analysis_result.SusceptibleAnimalSpecies else []),
                         human_risks=analysis_result.HumanRisks,
                         common_symptoms=";".join(analysis_result.CommonSymptoms if analysis_result.CommonSymptoms else []),
@@ -173,6 +174,7 @@ class PlantAnalysisService:
                 "scientific_name": result.scientific_name,
                 "susceptible_animal_species": result.susceptible_animal_species,
                 "human_risks": result.human_risks,
+                "description": result.description,
                 "common_symptoms": result.common_symptoms,
                 "recommended_actions": result.recommended_actions,
                 "confidence_score": float(result.confidence_score)

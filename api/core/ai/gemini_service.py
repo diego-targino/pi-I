@@ -34,6 +34,7 @@ class GeminiService:
             result = PlantAnalysisResponse.from_json(response.text)
     
         except Exception as ex:
+            print(ex)
             result = PlantAnalysisResponse(
                 ResultType=4,
                 ResponseContent=response.text if response else "",
