@@ -20,7 +20,9 @@ class SearchRequest(models.Model):
         related_name="search_requests"
     )
 
-    image = models.URLField()
+    image = models.ImageField(
+        upload_to="analysis/"
+    )
 
     result_type = models.IntegerField(
         null=True,

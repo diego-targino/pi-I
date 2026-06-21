@@ -14,7 +14,7 @@ class APILoggerMiddleware:
 
         # ===== REQUEST LOG =====
         try:
-            body = request.body.decode("utf-8") if request.body else ""
+            body = ""
         except Exception:
             body = "<unreadable>"
 
