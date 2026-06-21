@@ -16,6 +16,7 @@ from core.ai.openia_service import GPTService
 from core.ai.responses.plant_analysis_response import PlantAnalysisResponse
 from users.models.user_model import User
 from rest_framework.exceptions import NotFound
+from django.db.models import Prefetch
 
 class PlantAnalysisService:
 
@@ -198,17 +199,31 @@ class PlantAnalysisService:
             raise NotFound("Usuário não encontrado")
 
         requests = SearchRequest.objects.filter(
-            user=user
+            user=user,
+            result_type=SearchRequest.RESULT_COMPLETE
+        ).prefetch_related(
+            Prefetch(
+                "results",
+                queryset=PlantAnalysisResult.objects.order_by("id"),
+                to_attr="first_result"
+            )
         ).order_by("-request_date")
 
         return [
+    {
+        "search_request_id": request.id,
+        "status": request.status,
+        "result_type": request.result_type,
+        "request_date": request.request_date,
+        "finished_at": request.finished_at,
+        "image": request.image.url if request.image else None,
+        "analysis_result": (
             {
-                "search_request_id": request.id,
-                "status": request.status,
-                "result_type": request.result_type,
-                "request_date": request.request_date,
-                "finished_at": request.finished_at,
-                "image": request.image.url if request.image else None
+                "common_name": request.first_result[0].common_name,
+                "Description": request.first_result[0].description,
             }
-            for request in requests
-        ]
+            if request.first_result else None
+        )
+    }
+    for request in requests
+]
