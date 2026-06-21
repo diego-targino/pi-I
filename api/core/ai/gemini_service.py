@@ -11,7 +11,8 @@ class GeminiService:
 
     @staticmethod
     def analyse_image( image_data: str, mime_type: str) -> PlantAnalysisResponse:
-        
+        response = None
+
         try:
             image_bytes = base64.b64decode(image_data)
     

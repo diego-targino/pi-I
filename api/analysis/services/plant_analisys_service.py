@@ -1,9 +1,6 @@
 import base64
 from dataclasses import asdict
 from datetime import datetime
-import json
-from time import timezone
-from typing import List
 import uuid
 
 from analysis.dtos.analisys_dto import AnalysisDto
@@ -13,7 +10,9 @@ from django.db import transaction
 from analysis.models.plant_analysis_result_model import PlantAnalysisResult
 from analysis.models.search_error_log_model import SearchErrorLog
 from analysis.models.search_request_model import SearchRequest
+from decouple import config
 from core.ai.gemini_service import GeminiService
+from core.ai.openia_service import GPTService
 from core.ai.responses.plant_analysis_response import PlantAnalysisResponse
 from users.models.user_model import User
 from rest_framework.exceptions import NotFound
@@ -47,10 +46,17 @@ class PlantAnalysisService:
             save=True
         )
 
-        result : PlantAnalysisResponse = GeminiService.analyse_image(
-            dto.base64,
-            dto.mime_type
-        )
+        result = None
+        if(config("USE_OPENAI", default=False, cast=bool)):
+            result : PlantAnalysisResponse = GPTService.analyse_image(
+                dto.base64,
+                dto.mime_type
+            )
+        else:
+            result : PlantAnalysisResponse = GeminiService.analyse_image(
+                dto.base64,
+                dto.mime_type
+            )
 
         try:
             if result.ResultType in [SearchRequest.RESULT_COMPLETE, SearchRequest.RESULT_PARTIAL]:
