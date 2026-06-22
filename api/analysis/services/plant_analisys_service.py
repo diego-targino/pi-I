@@ -155,7 +155,26 @@ class PlantAnalysisService:
         
     @staticmethod
     def get_details(search_request_id, user_id):
-    
+        """
+        Obtém detalhes completos de uma análise específica.
+        
+        Args:
+            search_request_id: ID da requisição de análise
+            user_id: ID do usuário proprietário da análise
+            
+        Returns:
+            Dict: Detalhes da análise com estrutura:
+                {
+                    "search_request_id": int,
+                    "result_type": str,
+                    "status": str,
+                    "image": str (URL),
+                    "analysis_results": List[Dict]
+                }
+                
+        Raises:
+            NotFound: Quando o usuário ou análise não existe
+        """
         user = User.objects.filter(id=user_id).first()
     
         if not user:
@@ -170,28 +189,52 @@ class PlantAnalysisService:
             raise NotFound("Análise não encontrada")
     
         return {
-        "search_request_id": search_request.id,
-        "result_type": search_request.result_type,
-        "status": search_request.status,
-        "image": search_request.image.url if search_request.image else None,
-        "analysis_results": [
-            {
-                "id": result.id,
-                "common_name": result.common_name,
-                "scientific_name": result.scientific_name,
-                "susceptible_animal_species": result.susceptible_animal_species,
-                "human_risks": result.human_risks,
-                "description": result.description,
-                "common_symptoms": result.common_symptoms,
-                "recommended_actions": result.recommended_actions,
-                "confidence_score": float(result.confidence_score)
-            }
-            for result in search_request.results.all()
-        ]
-    }
+            "search_request_id": search_request.id,
+            "result_type": search_request.result_type,
+            "status": search_request.status,
+            "image": search_request.image.url if search_request.image else None,
+            "analysis_results": [
+                {
+                    "id": result.id,
+                    "common_name": result.common_name,
+                    "scientific_name": result.scientific_name,
+                    "susceptible_animal_species": result.susceptible_animal_species.split(";") if result.susceptible_animal_species else [],
+                    "human_risks": result.human_risks,
+                    "description": result.description,
+                    "common_symptoms": result.common_symptoms.split(";") if result.common_symptoms else [],
+                    "recommended_actions": result.recommended_actions.split(";") if result.recommended_actions else [],
+                    "confidence_score": float(result.confidence_score)
+                }
+                for result in search_request.results.all()
+            ]
+        }
 
     @staticmethod
     def get_history(user_id):
+        """
+        Obtém o histórico de análises completadas de um usuário.
+        
+        Args:
+            user_id: ID do usuário
+            
+        Returns:
+            List[Dict]: Lista de análises com estrutura:
+                {
+                    "search_request_id": int,
+                    "status": str,
+                    "result_type": str,
+                    "request_date": datetime,
+                    "finished_at": datetime,
+                    "image": str (URL),
+                    "analysis_result": {
+                        "common_name": str,
+                        "Description": str
+                    } | None
+                }
+                
+        Raises:
+            NotFound: Quando o usuário não existe
+        """
 
         user = User.objects.filter(id=user_id).first()
 

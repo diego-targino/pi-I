@@ -8,6 +8,7 @@ from drf_spectacular.types import OpenApiTypes
 from analysis.serializers.analysis_serializer import AnalysisSerializer
 from analysis.serializers.response_serializers import (
     AnalysisCreateResponseSerializer,
+    AnalysisHistoryItemSerializer,
     AnalysisHistoryResponseSerializer,
     AnalysisDetailResponseSerializer
 )
@@ -48,24 +49,29 @@ class PlantAnalysisViewSet(viewsets.ViewSet):
 
     @extend_schema(
         summary="Listar Histórico de Análises",
-        description="Retorna todas as análises realizadas por um usuário específico",
+        description="Retorna todas as análises completamente identificadas realizadas por um usuário. "
+                    "Inclui informações da imagem e o primeiro resultado de análise de cada busca.",
         parameters=[
             OpenApiParameter(
                 name='userId',
                 type=OpenApiTypes.INT,
                 location=OpenApiParameter.QUERY,
                 required=True,
-                description='ID do usuário'
+                description='ID do usuário proprietário das análises'
             )
         ],
         responses={
-            200: AnalysisHistoryResponseSerializer,
-            400: {"description": "userId não fornecido"},
+            200: AnalysisHistoryItemSerializer(many=True),
+            400: {"description": "userId não fornecido ou inválido"},
+            404: {"description": "Usuário não encontrado"},
         }
     )
     def list(self, request):
         """
         Lista histórico de análises de um usuário.
+        
+        Retorna apenas análises com resultado_type = RESULT_COMPLETE.
+        Ordenadas por data da requisição (mais recentes primeiro).
         
         Parâmetro obrigatório: userId (query parameter)
         """

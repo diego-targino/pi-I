@@ -20,19 +20,26 @@ class AnalysisCreateResponseSerializer(serializers.Serializer):
     error_message = serializers.CharField(required=False, allow_null=True)
 
 
+class AnalysisHistoryResultItemSerializer(serializers.Serializer):
+    """Serializer para o resultado de análise no histórico."""
+    common_name = serializers.CharField()
+    Description = serializers.CharField()
+
+
 class AnalysisHistoryItemSerializer(serializers.Serializer):
     """Serializer para um item do histórico de análises."""
-    id = serializers.IntegerField()
-    result_type = serializers.CharField()
+    search_request_id = serializers.IntegerField()
     status = serializers.CharField()
+    result_type = serializers.CharField()
     request_date = serializers.DateTimeField()
     finished_at = serializers.DateTimeField(required=False, allow_null=True)
+    image = serializers.URLField(required=False, allow_null=True)
+    analysis_result = AnalysisHistoryResultItemSerializer(required=False, allow_null=True)
 
 
 class AnalysisHistoryResponseSerializer(serializers.Serializer):
     """Serializer para resposta de histórico de análises."""
-    analyses = AnalysisHistoryItemSerializer(many=True)
-    total = serializers.IntegerField()
+    pass  # É uma lista, não um objeto wrapper
 
 
 class AnalysisDetailResponseSerializer(serializers.Serializer):
