@@ -4,42 +4,46 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 
+from users.serializers.change_status_serializer import ChangeStatusSerializer
 from users.serializers.login_serializer import LoginSerializer
+from users.serializers.register_admin_serializer import RegisterAdminSerializer
 from users.serializers.register_user_serializer import RegisterUserSerializer
-from users.serializers.response_serializers import LoginResponseSerializer, RegisterUserResponseSerializer
+from users.serializers.response_serializers import (
+    LoginResponseSerializer,
+    RegisterUserResponseSerializer
+)
 from users.services.user_service import UserService
 
 
 class UserViewSet(viewsets.ViewSet):
     """
     API de Usuários
-    
-    Endpoints para autenticação e registro de usuários.
+
+    Endpoints para autenticação e gerenciamento de usuários.
     """
 
     def get_permissions(self):
 
-        if self.action in ["login", "create"]:
+        if self.action in [
+            "login",
+            "create"
+        ]:
             return [AllowAny()]
 
         return super().get_permissions()
 
     @extend_schema(
         summary="Fazer Login",
-        description="Autentica um usuário com telefone e senha, retornando token JWT",
+        description="Autentica um usuário com telefone e senha.",
         request=LoginSerializer,
         responses={
             200: LoginResponseSerializer,
-            400: {"description": "Dados inválidos"},
+            400: {"description": "Dados inválidos"}
         }
     )
     @action(detail=False, methods=["post"])
     def login(self, request):
-        """
-        Autentica um usuário.
-        
-        Retorna um token JWT para uso em requisições subsequentes.
-        """
+
         serializer = LoginSerializer(
             data=request.data
         )
@@ -59,19 +63,15 @@ class UserViewSet(viewsets.ViewSet):
 
     @extend_schema(
         summary="Registrar Novo Usuário",
-        description="Cria uma nova conta de usuário com informações pessoais e dados da fazenda",
+        description="Cria uma nova conta de usuário.",
         request=RegisterUserSerializer,
         responses={
             201: RegisterUserResponseSerializer,
-            400: {"description": "Dados inválidos ou usuário já existe"},
+            400: {"description": "Dados inválidos"}
         }
     )
     def create(self, request):
-        """
-        Registra um novo usuário.
-        
-        Requer nome, telefone, senha e dados da fazenda.
-        """
+
         serializer = RegisterUserSerializer(
             data=request.data
         )
@@ -82,8 +82,113 @@ class UserViewSet(viewsets.ViewSet):
 
         dto = serializer.to_dto()
 
-        result = UserService.create_user(
+        result = UserService.create_user(dto)
+
+        return Response(
+            result,
+            status=status.HTTP_201_CREATED
+        )
+
+    @extend_schema(
+        summary="Registrar Administrador",
+        description="Cria um novo administrador.",
+        request=RegisterAdminSerializer,
+        responses={
+            201: RegisterUserResponseSerializer,
+            400: {"description": "Dados inválidos"}
+        }
+    )
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="admins"
+    )
+    def create_admin(self, request):
+
+        serializer = RegisterAdminSerializer(
+            data=request.data
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        dto = serializer.to_dto()
+
+        result = UserService.create_admin(dto)
+
+        return Response(
+            result,
+            status=status.HTTP_201_CREATED
+        )
+
+    @extend_schema(
+        summary="Listar Administradores"
+    )
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path="admins"
+    )
+    def list_admins(self, request):
+
+        requested_by = request.query_params.get(
+            "requested_by"
+        )
+
+        result = UserService.list_admins(
+            requested_by
+        )
+
+        return Response(
+            result,
+            status=status.HTTP_200_OK
+        )
+
+    @extend_schema(
+        summary="Listar Usuários"
+    )
+    def list(self, request):
+
+        requested_by = request.query_params.get(
+            "requested_by"
+        )
+
+        result = UserService.list_users(
+            requested_by
+        )
+
+        return Response(
+            result,
+            status=status.HTTP_200_OK
+        )
+
+    @extend_schema(
+        summary="Alterar Status do Usuário",
+        request=ChangeStatusSerializer
+    )
+    @action(
+        detail=False,
+        methods=["patch"],
+        url_path="status"
+    )
+    def change_status(self, request):
+
+        serializer = ChangeStatusSerializer(
+            data=request.data
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        dto = serializer.to_dto()
+
+        result = UserService.change_status(
             dto
         )
 
-        return Response(result, status=status.HTTP_201_CREATED)
+        return Response(
+            result,
+            status=status.HTTP_200_OK
+        )
