@@ -51,3 +51,43 @@ class AnalysisDetailResponseSerializer(serializers.Serializer):
     finished_at = serializers.DateTimeField(required=False, allow_null=True)
     analysis_results = AnalysisResultItemSerializer(many=True)
     error_message = serializers.CharField(required=False, allow_null=True)
+
+
+class AnalysisResultErrorSerializer(serializers.Serializer):
+    """Serializer para o resultado com erro."""
+    status = serializers.CharField()
+    error = serializers.CharField(required=False, allow_null=True)
+
+
+class AnalysisResultSuccessSerializer(serializers.Serializer):
+    """Serializer para o resultado com sucesso."""
+    status = serializers.CharField()
+    plant_name = serializers.CharField(required=False, allow_null=True)
+
+
+class AnalysisResultPendingSerializer(serializers.Serializer):
+    """Serializer para o resultado pendente."""
+    status = serializers.CharField()
+    message = serializers.CharField(required=False, allow_null=True)
+
+
+class AllAnalysisResultSerializer(serializers.Serializer):
+    """Serializer para o resultado (pode ser sucesso, erro ou pendente)."""
+    status = serializers.CharField()
+    error = serializers.CharField(required=False, allow_null=True)
+    plant_name = serializers.CharField(required=False, allow_null=True)
+    message = serializers.CharField(required=False, allow_null=True)
+
+
+class AllAnalysisItemSerializer(serializers.Serializer):
+    """Serializer para um item da listagem completa de análises."""
+    search_request_id = serializers.IntegerField()
+    request_date = serializers.DateTimeField()
+    status = serializers.CharField()
+    result = AllAnalysisResultSerializer()
+
+
+class AllAnalysisResponseSerializer(serializers.Serializer):
+    """Serializer para resposta de listagem completa de análises."""
+    pass  # É uma lista, não um objeto wrapper
+

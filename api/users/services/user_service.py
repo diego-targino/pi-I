@@ -32,6 +32,7 @@ class UserService:
         farm = Farm.objects.create(
             user=user,
             name=dto.farm.name,
+            state=dto.farm.state,
             location=dto.farm.location,
             municipality=dto.farm.municipality
         )
@@ -45,6 +46,7 @@ class UserService:
                 "status": user.status,
                 "farm": {
                     "name": farm.name,
+                    "state": farm.state,
                     "location": farm.location,
                     "municipality": farm.municipality
                 } if farm else None
@@ -86,6 +88,7 @@ class UserService:
                 "status": user.status,
                 "farm": {
                     "name": farm.name,
+                    "state": farm.state,
                     "location": farm.location,
                     "municipality": farm.municipality
                 } if farm else None

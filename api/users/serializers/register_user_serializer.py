@@ -59,6 +59,7 @@ class RegisterUserSerializer(serializers.Serializer):
 
         farm_dto = FarmDTO(
             name=farm_data["name"],
+            state=farm_data["state"],
             location=farm_data["location"],
             municipality=farm_data["municipality"]
         )

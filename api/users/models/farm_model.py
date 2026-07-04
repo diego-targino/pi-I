@@ -10,6 +10,7 @@ class Farm(models.Model):
     )
 
     name = models.CharField(max_length=150)
+    state = models.CharField(max_length=150, null=True, blank=True)
     location = models.CharField(max_length=150)
     municipality = models.CharField(max_length=150)
 

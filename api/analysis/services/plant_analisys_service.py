@@ -253,20 +253,67 @@ class PlantAnalysisService:
         ).order_by("-request_date")
 
         return [
-    {
-        "search_request_id": request.id,
-        "status": request.status,
-        "result_type": request.result_type,
-        "request_date": request.request_date,
-        "finished_at": request.finished_at,
-        "image": request.image.url if request.image else None,
-        "analysis_result": (
-            {
-                "common_name": request.first_result[0].common_name,
-                "Description": request.first_result[0].description,
-            }
-            if request.first_result else None
-        )
-    }
-    for request in requests
+        {
+            "search_request_id": request.id,
+            "status": request.status,
+            "result_type": request.result_type,
+            "request_date": request.request_date,
+            "finished_at": request.finished_at,
+            "image": request.image.url if request.image else None,
+            "analysis_result": (
+                {
+                    "common_name": request.first_result[0].common_name,
+                    "Description": request.first_result[0].description,
+                }
+                if request.first_result else None
+            )
+        }
+        for request in requests
 ]
+
+    @staticmethod
+    def get_all_analysis(requested_by):
+        """
+        Obtém todas as análises de todos os usuários (sucesso e erro).
+        """
+
+        requester = User.objects.filter(id=requested_by).first()
+
+        if not requester:
+            raise NotFound("Usuário solicitante não encontrado")
+
+        if not requester.is_admin:
+            raise NotFound("Apenas administradores podem realizar esta operação")
+
+        requests = (
+            SearchRequest.objects
+            .prefetch_related(
+                Prefetch(
+                    "results",
+                    queryset=PlantAnalysisResult.objects.order_by("id")
+                )
+            )
+            .select_related("error_log")
+            .order_by("-request_date")
+        )
+
+        response = []
+
+        for search_request in requests:
+            result = search_request.results.first()
+
+            if result is not None:
+                result_data = result.common_name
+            elif hasattr(search_request, "error_log"):
+                result_data = search_request.error_log.error_description
+            else:
+                result_data = None
+
+            response.append({
+                "search_request_id": search_request.id,
+                "request_date": search_request.request_date,
+                "status": search_request.status,
+                "result": result_data,
+            })
+
+        return response

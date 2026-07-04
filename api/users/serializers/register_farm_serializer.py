@@ -10,6 +10,12 @@ class RegisterFarmSerializer(serializers.Serializer):
         help_text="Nome da fazenda"
     )
 
+    state = serializers.CharField(
+        max_length=150,
+        required=True,
+        help_text="Estado onde a fazenda está localizada"
+    )
+
     location = serializers.CharField(
         max_length=150,
         required=True,
@@ -26,6 +32,7 @@ class RegisterFarmSerializer(serializers.Serializer):
 
         return FarmDTO(
             name=self.validated_data["name"],
+            state=self.validated_data["state"],
             location=self.validated_data["location"],
             municipality=self.validated_data["municipality"]
         )

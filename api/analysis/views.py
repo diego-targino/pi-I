@@ -9,8 +9,8 @@ from analysis.serializers.analysis_serializer import AnalysisSerializer
 from analysis.serializers.response_serializers import (
     AnalysisCreateResponseSerializer,
     AnalysisHistoryItemSerializer,
-    AnalysisHistoryResponseSerializer,
-    AnalysisDetailResponseSerializer
+    AnalysisDetailResponseSerializer,
+    AllAnalysisItemSerializer
 )
 from analysis.services.plant_analisys_service import PlantAnalysisService
 
@@ -127,6 +127,64 @@ class PlantAnalysisViewSet(viewsets.ViewSet):
         result = PlantAnalysisService.get_details(
             int(pk),
             int(user_id)
+        )
+
+        return Response(
+            result,
+            status=status.HTTP_200_OK
+        )
+
+    @extend_schema(
+        summary="Listar Todas as Análises",
+        description="Retorna todas as análises de todos os usuários (sucesso e erro). "
+                    "Para análises bem-sucedidas, retorna o nome da primeira planta identificada. "
+                    "Para análises com erro, retorna a descrição do erro. "
+                    "Apenas administradores podem acessar.",
+        parameters=[
+            OpenApiParameter(
+                name='requested_by',
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.QUERY,
+                required=True,
+                description='ID do usuário solicitante (deve ser administrador)'
+            )
+        ],
+        responses={
+            200: AllAnalysisItemSerializer(many=True),
+            400: {"description": "Parâmetro requested_by não fornecido"},
+            404: {"description": "Usuário solicitante não encontrado ou não é administrador"},
+        }
+    )
+    @action(
+        detail=False,
+        methods=['get'],
+        url_path='all-analysis'
+    )
+    def all_analysis(self, request):
+        """
+        Lista todas as análises de todos os usuários (sucesso, erro e pendente).
+        
+        Retorna:
+        - ID da SearchRequest
+        - Data e hora da requisição
+        - Status da análise
+        - Resultado:
+            - Se sucesso: nome da primeira planta identificada
+            - Se erro: descrição do erro
+        
+        Parâmetro obrigatório:
+        - requested_by (query parameter): ID do usuário solicitante (deve ser admin)
+        """
+        requested_by = request.query_params.get("requested_by")
+
+        if not requested_by:
+            return Response(
+                {"message": "requested_by é obrigatório"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        result = PlantAnalysisService.get_all_analysis(
+            int(requested_by)
         )
 
         return Response(
