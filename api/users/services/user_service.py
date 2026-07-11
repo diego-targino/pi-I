@@ -8,6 +8,7 @@ from rest_framework.exceptions import ParseError
 
 from users.dtos.login_dto import LoginDto
 from users.dtos.register_user_dto import RegisterUserDTO
+from users.dtos.update_user_dto import UpdateUserDTO
 from users.models.farm_model import Farm
 from users.models.user_model import User, UserStatus
 
@@ -241,4 +242,55 @@ class UserService:
 
         return {
             "message": "Status atualizado com sucesso."
+        }
+
+    @staticmethod
+    @transaction.atomic
+    def update_user(dto: UpdateUserDTO):
+
+        user = User.objects.filter(id=dto.user_id).first()
+
+        if not user:
+            raise ParseError("Usuário não encontrado")
+
+        if dto.name:
+            user.name = dto.name
+
+        if dto.phone:
+            user.phone = dto.phone
+
+        user.save(update_fields=["name", "phone"])
+
+        farm = Farm.objects.filter(user=user).first()
+
+        if farm:
+            if dto.farm_name:
+                farm.name = dto.farm_name
+
+            if dto.state:
+                farm.state = dto.state
+
+            if dto.location:
+                farm.location = dto.location
+
+            if dto.municipality:
+                farm.municipality = dto.municipality
+
+            farm.save(update_fields=["name", "state", "location", "municipality"])
+
+        return {
+            "message": "Dados cadastrais atualizados com sucesso.",
+            "user": {
+                "id": user.id,
+                "name": user.name,
+                "phone": user.phone,
+                "is_admin": user.is_admin,
+                "status": user.status,
+                "farm": {
+                    "name": farm.name,
+                    "state": farm.state,
+                    "location": farm.location,
+                    "municipality": farm.municipality
+                } if farm else None
+            }
         }

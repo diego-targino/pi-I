@@ -8,6 +8,7 @@ from users.serializers.change_status_serializer import ChangeStatusSerializer
 from users.serializers.login_serializer import LoginSerializer
 from users.serializers.register_admin_serializer import RegisterAdminSerializer
 from users.serializers.register_user_serializer import RegisterUserSerializer
+from users.serializers.update_user_serializer import UpdateUserSerializer
 from users.serializers.response_serializers import (
     LoginResponseSerializer,
     RegisterUserResponseSerializer
@@ -187,6 +188,51 @@ class UserViewSet(viewsets.ViewSet):
         result = UserService.change_status(
             dto
         )
+
+        return Response(
+            result,
+            status=status.HTTP_200_OK
+        )
+
+    @extend_schema(
+        summary="Atualizar Dados Cadastrais",
+        description="Atualiza os dados de perfil e fazenda do usuário autenticado.",
+        request=UpdateUserSerializer,
+        responses={
+            200: RegisterUserResponseSerializer,
+            400: {"description": "Dados inválidos"},
+            404: {"description": "Usuário não encontrado"}
+        }
+    )
+    @action(
+        detail=False,
+        methods=["patch"],
+        url_path="profile"
+    )
+    def update_profile(self, request):
+        """
+        Atualiza os dados cadastrais do usuário.
+        
+        Permite atualização parcial ou completa de:
+        - Nome do usuário
+        - Telefone
+        - Nome da fazenda
+        - Estado
+        - Localidade
+        - Município
+        
+        Parâmetro obrigatório: user_id (no body da requisição)
+        """
+        serializer = UpdateUserSerializer(
+            data=request.data,
+            partial=True
+        )
+
+        serializer.is_valid(raise_exception=True)
+
+        dto = serializer.to_dto()
+
+        result = UserService.update_user(dto)
 
         return Response(
             result,
