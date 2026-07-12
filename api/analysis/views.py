@@ -84,7 +84,8 @@ class PlantAnalysisViewSet(viewsets.ViewSet):
             )
 
         result = PlantAnalysisService.get_history(
-            int(user_id)
+            int(user_id),
+            request=request
         )
 
         return Response(
@@ -126,7 +127,8 @@ class PlantAnalysisViewSet(viewsets.ViewSet):
 
         result = PlantAnalysisService.get_details(
             int(pk),
-            int(user_id)
+            int(user_id),
+            request=request
         )
 
         return Response(

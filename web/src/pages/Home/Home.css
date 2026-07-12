@@ -1,0 +1,491 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../src/assets/fonts/Montserrat/static/Montserrat-Light.ttf') format('truetype');
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../src/assets/fonts/Montserrat/static/Montserrat-Regular.ttf') format('truetype');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../src/assets/fonts/Montserrat/static/Montserrat-Medium.ttf') format('truetype');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../src/assets/fonts/Montserrat/static/Montserrat-Bold.ttf') format('truetype');
+    font-weight: 700;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(90deg, #000000, #00724a);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ==================== CABEÇALHO ==================== */
+
+#cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+
+    border: 1px solid #ffffff;
+    border-radius: 30px;
+    margin: 20px;
+    padding: 0 10px;
+}
+
+#icon-menu,
+#icon-person {
+    width: 60px;
+    height: 60px;
+    padding: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#cabecalho #logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(90px, 18vw, 220px);
+    height: auto;
+    margin: 0;
+    pointer-events: none;
+}
+
+/* ==================== CONTEÚDO ==================== */
+
+#corpo h2 {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    font-size: clamp(18px, 4vw, 25px);
+    padding-top: 80px;
+    color: #ffffff;
+    font-weight: 500;
+
+    width: 90%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+#corpo h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    font-size: clamp(13px, 3vw, 17px);
+    color: #ffffff;
+
+    width: 90%;
+    margin: 0 auto;
+}
+
+#selecionar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin: 40px auto;
+    gap: 20px;
+}
+
+#photo-selection {
+    width: clamp(70px, 15vw, 100px);
+    height: auto;
+    padding: 20px;
+}
+
+#arquivo {
+    background-color: #04724b;
+
+    width: 85%;
+    max-width: 300px;
+    min-height: 60px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 40px;
+    border: 2px solid #96ffda;
+
+    color: #ffffff;
+    text-align: center;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(16px, 4vw, 25px);
+    font-weight: 400;
+
+    cursor: pointer;
+}
+
+#recomendacao {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;                 /* Espaço controlado entre as duas colunas */
+  justify-content: center;   /* Centraliza as colunas entre si */
+  max-width: 650px;          /* O SEGREDO: Limita o tamanho para não espalhar na tela */
+  margin: 40px auto 0 auto;  /* Centraliza o bloco inteiro na página e afasta do botão de cima */
+  text-align: left;          /* Garante que o texto comece da esquerda */
+}
+
+.bloco {
+  flex: 1;
+  margin: 0;
+  padding-left: 20px;        /* Dá espaço para as bolinhas aparecerem perfeitamente */
+  list-style-type: disc;     /* Garante que ambos os lados tenham bolinhas idênticas */
+}
+
+.bloco li {
+  color: #ffffff;            /* Deixa todo o texto claro e legível no fundo verde */
+  margin-bottom: 15px;       /* Dá um espaço confortável entre uma frase e outra */
+  font-size: 14px;
+}
+/* ==================== MENU LATERAL ==================== */
+
+#menu-lateral {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: min(80vw, 280px);
+    height: 100vh;
+
+    background-color: #1e3830;
+
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: 'Montserrat', sans-serif;
+
+    transition: transform 0.4s ease-in-out;
+}
+
+.menu-fechado {
+    transform: translateX(-100%);
+}
+
+.menu-aberto {
+    transform: translateX(0);
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 30px 20px 20px;
+}
+
+.menu-logo {
+    width: 110px;
+    height: auto;
+}
+
+.menu-fechar {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.menu-titulo {
+    color: #8fa09a;
+    font-size: 14px;
+    font-weight: 400;
+
+    padding-left: 25px;
+    margin-bottom: 15px;
+}
+
+.menu-opcoes {
+    list-style: none;
+    padding: 0 15px;
+}
+
+.opcao-item {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 12px 15px;
+    margin-bottom: 8px;
+
+    border-radius: 10px;
+
+    transition: background 0.2s;
+}
+
+.opcao-item:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.opcao-item a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.opcao-item.ativa {
+    background-color: #ffffff;
+    border-radius: 10px 0 0 10px;
+    margin-right: -15px;
+}
+
+.opcao-item.ativa a {
+    color: #1e3830;
+    font-weight: 600;
+}
+
+.menu-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.menu-rodape {
+    margin-top: auto;
+    padding: 0 15px 30px;
+}
+
+.menu-divisor {
+    border: 0;
+    border-top: 1px solid #334e45;
+    margin-bottom: 20px;
+}
+
+.opcao-item.sair a {
+    color: #a0b0ab;
+}
+
+/* ==================== CONFIRMAÇÃO ==================== */
+
+#container-confirmacao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin: 40px auto;
+    gap: 20px;
+    width: 100%;
+}
+
+#container-confirmacao h2 {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    font-size: clamp(18px, 4vw, 25px); /* Fluido igual ao H2 do corpo */
+    color: #ffffff;
+    font-weight: 500;
+    
+    width: 90%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.preview-box {
+    width: 90%;
+    max-width: 500px;
+    height: clamp(250px, 45vh, 400px); /* Altura elástica baseada na tela do dispositivo */
+
+    border-radius: 20px;
+    border: 2px solid #009963; /* Borda idêntica aos inputs do seu app */
+    background-color: rgba(0, 0, 0, 0.3); /* Fundo sutil para destacar imagens transparentes */
+    overflow: hidden;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+}
+
+#preview-foto {
+    width: 100%;
+    height: 100%; /* Ocupa todo o container elástico */
+    display: block;
+    object-fit: contain; /* Evita que a folha/planta sofra distorções em qualquer tela */
+}
+
+.botoes-confirmacao {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    width: 90%;
+    max-width: 500px; /* Alinha o limite dos botões perfeitamente com a foto */
+    justify-content: center;
+}
+
+.botoes-confirmacao button {
+    flex: 1;
+    min-width: 140px;
+    min-height: 52px; /* Garante área de toque confortável no mobile */
+
+    padding: 12px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(14px, 3.5vw, 16px); /* Texto se adapta em telas pequenas */
+    font-weight: 400;
+
+    border: none;
+    border-radius: 20px; /* Borda arredondada idêntica ao botão #arquivo */
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+#btn-confirmar {
+    background-color: #04724b;
+    color: white;
+    border: 2px solid #96ffda; /* Destaque luminoso sutil */
+}
+
+#btn-confirmar:hover {
+    background-color: #035a3b;
+    transform: scale(1.03); /* Efeito suave de crescimento igual aos outros botões */
+}
+
+#btn-alterar {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+#btn-alterar:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+    transform: scale(1.03);
+}
+
+/* ==================== TABLET (até 768px) ==================== */
+
+@media (max-width: 768px) {
+
+    #cabecalho {
+        margin: 12px 15px;
+        padding: 0 8px;
+    }
+
+    #icon-menu,
+    #icon-person {
+        width: 48px;
+        height: 48px;
+        padding: 12px;
+    }
+
+    #corpo h2 {
+        padding-top: 50px;
+        width: 92%;
+    }
+
+    #selecionar {
+        margin: 30px auto;
+    }
+
+    #arquivo {
+        width: 80%;
+        min-height: 55px;
+    }
+
+    #recomendacao {
+        margin: 20px;
+    }
+
+    .opcao-item a {
+        font-size: 14px;
+    }
+
+    .botoes-confirmacao {
+        gap: 10px;
+    }
+}
+
+/* ==================== CELULAR (até 480px) ==================== */
+
+@media (max-width: 480px) {
+
+    #cabecalho {
+        margin: 10px 12px;
+        border-radius: 20px;
+        padding: 0 4px;
+    }
+
+    #icon-menu,
+    #icon-person {
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+    }
+
+    #logo {
+        width: 90px;
+    }
+
+    #corpo h2 {
+        padding-top: 35px;
+        width: 95%;
+    }
+
+    #arquivo {
+        width: 88%;
+        min-height: 52px;
+        font-size: 16px;
+    }
+
+    #photo-selection {
+        padding: 12px;
+    }
+
+    #menu-lateral {
+        width: 85vw;
+    }
+
+    .botoes-confirmacao {
+        flex-direction: column;
+    }
+
+    .botoes-confirmacao button {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .preview-box {
+        padding: 12px;
+    }
+}
+
+/* ==================== TELAS MUITO PEQUENAS (até 360px) ==================== */
+
+@media (max-width: 360px) {
+
+    #cabecalho {
+        margin: 8px;
+        border-radius: 15px;
+    }
+
+    #icon-menu,
+    #icon-person {
+        width: 34px;
+        height: 34px;
+        padding: 8px;
+    }
+
+    #logo {
+        width: 75px;
+    }
+}

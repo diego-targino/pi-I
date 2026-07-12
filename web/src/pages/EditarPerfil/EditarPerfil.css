@@ -1,0 +1,265 @@
+/* ===== CONTAINER PRINCIPAL ===== */
+.editar-perfil-container {
+  max-width: 1100px;
+  margin: 100px auto 0 auto;
+  padding: 20px;
+  color: #e0e0e0;
+}
+
+h2 {
+  margin-bottom: 25px;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 35px;
+}
+
+.formulario-perfil {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.colunas-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 35px;
+}
+
+/* ===== CAMPOS ===== */
+.campo-com-botao,
+.campo-sem-botao {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.campo-com-botao label,
+.campo-sem-botao label {
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+/* WRAPPER interno: input + botão lado a lado */
+.campo-com-botao .input-botao-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.campo-com-botao input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+.campo-sem-botao select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.campo-com-botao input:hover,
+.campo-sem-botao select:hover {
+  border-color: #99da9b;
+  background-color: #ffffff;
+}
+
+.campo-com-botao input:focus,
+.campo-sem-botao select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+/* ===== BOTÃO EDITAR ===== */
+.campo-com-botao .btn-editar {
+  background-color: #99da9b;
+  color: rgb(0, 0, 0);
+  padding: 10px 14px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+  width: 90px;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+.campo-com-botao .btn-editar:hover {
+  background-color: #7bc97e;
+}
+
+.campo-com-botao input:disabled {
+  background-color: #eaeaea;
+  color: #666;
+  cursor: not-allowed;
+  border-color: #d0d0d0;
+}
+
+/* ===== BOTÕES FINAIS ===== */
+.botoes-finais {
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.btn-salvar,
+.btn-cancelar {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 500;
+  width: 200px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-salvar {
+  background-color: #4CAF50;
+  color: rgb(0, 0, 0);
+}
+
+.btn-salvar:hover {
+  background-color: #45a049;
+}
+
+.btn-cancelar {
+  background-color: #99da9b;
+  color: rgb(66, 66, 66);
+}
+
+.btn-cancelar:hover {
+  background-color: #7bc97e;
+}
+
+/* ==================== TABLET (até 900px) ==================== */
+
+@media (max-width: 900px) {
+
+  .editar-perfil-container {
+    margin-top: 80px;
+    padding: 16px;
+  }
+
+  .colunas-2 {
+    gap: 24px;
+  }
+}
+
+/* ==================== TABLET PEQUENO (até 700px) ==================== */
+
+@media (max-width: 700px) {
+
+  .colunas-2 {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .botoes-finais {
+    gap: 20px;
+  }
+
+  .btn-salvar,
+  .btn-cancelar {
+    width: 160px;
+  }
+}
+
+/* ==================== CELULAR (até 480px) ==================== */
+
+@media (max-width: 480px) {
+
+  .editar-perfil-container {
+    margin-top: 70px;
+    padding: 12px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+  }
+
+  h3 {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+
+  .colunas-2 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .campo-com-botao label,
+  .campo-sem-botao label {
+    font-size: 13px;
+  }
+
+  .campo-com-botao input,
+  .campo-sem-botao select {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .campo-com-botao .btn-editar {
+    width: 80px;
+    padding: 10px 10px;
+    font-size: 13px;
+  }
+
+  .botoes-finais {
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .btn-salvar,
+  .btn-cancelar {
+    width: 140px;
+    padding: 11px 16px;
+    font-size: 14px;
+  }
+}
+
+/* ==================== TELAS MUITO PEQUENAS (até 360px) ==================== */
+
+@media (max-width: 360px) {
+
+  .campo-com-botao .input-botao-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .campo-com-botao .btn-editar {
+    width: 100%;
+  }
+
+  .botoes-finais {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-salvar,
+  .btn-cancelar {
+    width: 100%;
+    max-width: 280px;
+  }
+}

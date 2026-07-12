@@ -1,0 +1,124 @@
+body {
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+/* CONTAINER DO CONTEÚDO PRINCIPAL */
+#detalhes-planta {
+    max-width: 1200px; 
+    margin: 80px auto;  
+    padding: 0 30px;   
+    box-sizing: border-box;
+}
+
+/* ÁREA DO BOTÃO VOLTAR E TÍTULO */
+.top-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+
+.top-navigation button{
+    border: 1px solid #e9e9e9;
+    color: #ffffff;
+    background-color: #04724b69;
+    border-radius: 20px;
+
+    padding: 12px 25px;
+
+    font-size: 14px;
+    font-weight: 300;
+    font-family: 'Montserrat', sans-serif;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.top-navigation h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.voltar {
+    background: transparent;
+    border: none;
+    color: #00ff88; 
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.voltar:hover {
+    color: #ffffff;
+}
+
+/* ALINHAMENTO DO BLOCO DE INFORMAÇÕES */
+.container-description {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+}
+
+/* COMPORTAMENTO DA IMAGEM */
+.resultado-imagem img {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 24px;
+    border: 3px solid #009141;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+/* COMPORTAMENTO DAS DUAS COLUNAS DE TEXTO */
+.info-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* FORMATAÇÃO DOS BLOCOS DE TEXTO INDIVIDUAIS */
+.info-group h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #00ff88;
+    margin: 0 0 8px 0;
+}
+
+.info-group p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+/* RESPONSIVIDADE: Se a tela for de celular ou tablet, empilha tudo verticalmente */
+@media (max-width: 768px) {
+    .container-description {
+        flex-direction: column;
+        align-items: center;
+        gap: 35px;
+    }
+
+    .resultado-imagem img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .info-box {
+        width: 100%;
+    }
+}

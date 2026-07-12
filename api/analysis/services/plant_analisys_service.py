@@ -4,6 +4,7 @@ from datetime import datetime
 import uuid
 
 from analysis.dtos.analisys_dto import AnalysisDto
+from django.conf import settings
 from django.core.files.base import ContentFile
 
 from django.db import transaction
@@ -154,7 +155,16 @@ class PlantAnalysisService:
 
         
     @staticmethod
-    def get_details(search_request_id, user_id):
+    def _build_media_url(image_field, request=None):
+        if not image_field:
+            return None
+
+        image_url = image_field.url
+
+        return image_url
+
+    @staticmethod
+    def get_details(search_request_id, user_id, request=None):
         """
         Obtém detalhes completos de uma análise específica.
         
@@ -192,7 +202,7 @@ class PlantAnalysisService:
             "search_request_id": search_request.id,
             "result_type": search_request.result_type,
             "status": search_request.status,
-            "image": search_request.image.url if search_request.image else None,
+            "image": PlantAnalysisService._build_media_url(search_request.image, request=request),
             "analysis_results": [
                 {
                     "id": result.id,
@@ -210,7 +220,7 @@ class PlantAnalysisService:
         }
 
     @staticmethod
-    def get_history(user_id):
+    def get_history(user_id, request=None):
         """
         Obtém o histórico de análises completadas de um usuário.
         
@@ -253,23 +263,23 @@ class PlantAnalysisService:
         ).order_by("-request_date")
 
         return [
-        {
-            "search_request_id": request.id,
-            "status": request.status,
-            "result_type": request.result_type,
-            "request_date": request.request_date,
-            "finished_at": request.finished_at,
-            "image": request.image.url if request.image else None,
-            "analysis_result": (
-                {
-                    "common_name": request.first_result[0].common_name,
-                    "Description": request.first_result[0].description,
-                }
-                if request.first_result else None
-            )
-        }
-        for request in requests
-]
+            {
+                "search_request_id": request_obj.id,
+                "status": request_obj.status,
+                "result_type": request_obj.result_type,
+                "request_date": request_obj.request_date,
+                "finished_at": request_obj.finished_at,
+                "image": PlantAnalysisService._build_media_url(request_obj.image, request=request),
+                "analysis_result": (
+                    {
+                        "common_name": request_obj.first_result[0].common_name,
+                        "Description": request_obj.first_result[0].description,
+                    }
+                    if request_obj.first_result else None
+                )
+            }
+            for request_obj in requests
+        ]
 
     @staticmethod
     def get_all_analysis(requested_by):

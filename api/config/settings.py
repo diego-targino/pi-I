@@ -13,26 +13,38 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from decouple import config
 
+
+def _get_env_list(name, default):
+    value = config(name, default=default)
+    if not value:
+        return []
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = config("MEDIA_URL", default="/media/")
+MEDIA_ROOT = Path(config("MEDIA_ROOT", default=str(BASE_DIR / "media")))
+MEDIA_BASE_URL = config("MEDIA_BASE_URL", default="")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-dev-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = [
-    "pi-i.onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = _get_env_list(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,0.0.0.0,::1,*"
+)
+CSRF_TRUSTED_ORIGINS = _get_env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    "http://localhost:8000,http://127.0.0.1:8000,http://0.0.0.0:8000,http://host.docker.internal:8000"
+)
 
 
 # Application definition
